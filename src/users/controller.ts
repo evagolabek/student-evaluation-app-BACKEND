@@ -37,5 +37,5 @@ export default class UserController {
     await entity.setPassword(password)
     return entity.save()
   }
-
+  
 }

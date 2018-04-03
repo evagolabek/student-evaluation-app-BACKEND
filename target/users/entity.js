@@ -14,6 +14,7 @@ const BaseEntity_1 = require("typeorm/repository/BaseEntity");
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const bcrypt = require("bcrypt");
+const entity_1 = require("../evaluations/entity");
 let User = class User extends BaseEntity_1.BaseEntity {
     async setPassword(rawPassword) {
         const hash = await bcrypt.hash(rawPassword, 10);
@@ -28,18 +29,20 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    class_validator_1.Length(5, 25),
+    class_validator_1.IsEmail(),
     typeorm_1.Column('text'),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
     class_validator_1.IsString(),
-    class_validator_1.MinLength(8),
-    typeorm_1.Column('text', { nullable: true }),
+    typeorm_1.Column('text'),
     class_transformer_1.Exclude({ toPlainOnly: true }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    typeorm_1.OneToMany(_ => entity_1.default, evaluation => evaluation.user),
+    __metadata("design:type", Array)
+], User.prototype, "evaluations", void 0);
 User = __decorate([
     typeorm_1.Entity()
 ], User);

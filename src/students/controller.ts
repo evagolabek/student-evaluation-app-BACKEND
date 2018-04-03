@@ -38,5 +38,5 @@ export default class StudentController {
     await entity.setPassword(password)
     return entity.save()
   }
-
+  
 }

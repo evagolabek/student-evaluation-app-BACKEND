@@ -7,6 +7,7 @@ const controller_2 = require("./users/controller");
 const controller_3 = require("./batches/controller");
 const controller_4 = require("./evaluations/controller");
 const controller_5 = require("./students/controller");
+const db_1 = require("./db");
 const port = process.env.PORT || 4000;
 const app = routing_controllers_1.createKoaServer({
     controllers: [
@@ -17,5 +18,7 @@ const app = routing_controllers_1.createKoaServer({
         controller_5.default,
     ]
 });
-app.listen(port, () => console.log(`Listening on port ${port}`));
+db_1.default()
+    .then(_ => app.listen(port, () => console.log(`Listening on port ${port}`)))
+    .catch(err => console.error(err));
 //# sourceMappingURL=index.js.map

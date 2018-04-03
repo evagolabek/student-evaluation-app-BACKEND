@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const BaseEntity_1 = require("typeorm/repository/BaseEntity");
 const class_validator_1 = require("class-validator");
+const entity_1 = require("../users/entity");
+const entity_2 = require("../students/entity");
 let Evaluation = class Evaluation extends BaseEntity_1.BaseEntity {
 };
 __decorate([
@@ -19,17 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Evaluation.prototype, "id", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    typeorm_1.Column('text'),
-    __metadata("design:type", String)
-], Evaluation.prototype, "studentId", void 0);
-__decorate([
-    class_validator_1.IsString(),
-    typeorm_1.Column('int'),
-    __metadata("design:type", Number)
-], Evaluation.prototype, "userId", void 0);
-__decorate([
-    class_validator_1.IsString(),
+    class_validator_1.IsDate(),
     typeorm_1.Column(),
     __metadata("design:type", Date)
 ], Evaluation.prototype, "date", void 0);
@@ -38,6 +30,19 @@ __decorate([
     typeorm_1.Column('text'),
     __metadata("design:type", String)
 ], Evaluation.prototype, "colour", void 0);
+__decorate([
+    class_validator_1.IsString(),
+    typeorm_1.Column('text'),
+    __metadata("design:type", String)
+], Evaluation.prototype, "remarks", void 0);
+__decorate([
+    typeorm_1.ManyToOne(_ => entity_1.default, user => user.evaluations),
+    __metadata("design:type", entity_1.default)
+], Evaluation.prototype, "user", void 0);
+__decorate([
+    typeorm_1.ManyToOne(_ => entity_2.default, student => student.evaluations),
+    __metadata("design:type", entity_2.default)
+], Evaluation.prototype, "student", void 0);
 Evaluation = __decorate([
     typeorm_1.Entity()
 ], Evaluation);

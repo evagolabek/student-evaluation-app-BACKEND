@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
-import { IsString } from 'class-validator'
+import { IsInt, IsDate } from 'class-validator'
+import Student from '../students/entity'
 
 
 @Entity()
@@ -9,17 +10,19 @@ export default class Batch extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number
 
-  @IsString()
+  @IsInt()
   @Column('int')
   number: number
 
-  @IsString()
-  @Column('text')
+  @IsDate()
+  @Column()
   startDate: Date
 
-  @IsString()
-  @Column('text')
+  @IsDate()
+  @Column()
   endDate: Date
 
+  @OneToMany(_=> Student, student => student.batch)
+  students: Student[]
 
 }

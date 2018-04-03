@@ -23,7 +23,7 @@ class CustomNamingStrategy extends DefaultNamingStrategy_1.DefaultNamingStrategy
 }
 exports.default = () => typeorm_1.createConnection({
     type: "postgres",
-    url: process.env.DATABASE_URL || 'postgres://localhost:5432/postgres',
+    url: process.env.DATABASE_URL || 'postgres://localhost:5432/evaluation',
     entities: [
         entity_4.default,
         entity_1.default,

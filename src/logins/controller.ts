@@ -26,7 +26,7 @@ export default class LoginController {
 
     const jwt = sign({ id: user.id })
     return { jwt }
-
+    
     // else: send some HTTP 400 Bad request error
   }
 }

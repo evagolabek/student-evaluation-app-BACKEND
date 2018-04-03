@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const BaseEntity_1 = require("typeorm/repository/BaseEntity");
 const class_validator_1 = require("class-validator");
+const entity_1 = require("../students/entity");
 let Batch = class Batch extends BaseEntity_1.BaseEntity {
 };
 __decorate([
@@ -19,20 +20,24 @@ __decorate([
     __metadata("design:type", Number)
 ], Batch.prototype, "id", void 0);
 __decorate([
-    class_validator_1.IsString(),
+    class_validator_1.IsInt(),
     typeorm_1.Column('int'),
     __metadata("design:type", Number)
 ], Batch.prototype, "number", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    typeorm_1.Column('text'),
+    class_validator_1.IsDate(),
+    typeorm_1.Column(),
     __metadata("design:type", Date)
 ], Batch.prototype, "startDate", void 0);
 __decorate([
-    class_validator_1.IsString(),
-    typeorm_1.Column('text'),
+    class_validator_1.IsDate(),
+    typeorm_1.Column(),
     __metadata("design:type", Date)
 ], Batch.prototype, "endDate", void 0);
+__decorate([
+    typeorm_1.OneToMany(_ => entity_1.default, student => student.batch),
+    __metadata("design:type", Array)
+], Batch.prototype, "students", void 0);
 Batch = __decorate([
     typeorm_1.Entity()
 ], Batch);

@@ -27,5 +27,4 @@ export default class BatchController {
     await entity.setPassword(password)
     return entity.save()
   }
-
 }
