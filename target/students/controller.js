@@ -11,18 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const routing_controllers_1 = require("routing-controllers");
 const entity_1 = require("./entity");
+const entity_2 = require("../batches/entity");
 let StudentController = class StudentController {
     getStudent(id) {
         return entity_1.default.findOneById(id);
@@ -31,17 +23,17 @@ let StudentController = class StudentController {
         const students = await entity_1.default.find();
         return { students };
     }
-    async updateStudent(id, update) {
-        const student = await entity_1.default.findOneById(id);
-        if (!student)
-            throw new routing_controllers_1.NotFoundError('Cannot find student');
-        return entity_1.default.merge(student, update).save();
-    }
-    async createStudent(student) {
-        const { password } = user, rest = __rest(user, ["password"]);
-        const entity = entity_1.default.create(rest);
-        await entity.setPassword(password);
-        return entity.save();
+    async createStudent(batchId, student) {
+        const batch = await entity_2.default.findOneById(batchId);
+        if (!batch)
+            throw new routing_controllers_1.BadRequestError(`Batch does not exist`);
+        const entity = await entity_1.default.create({
+            firstName: student.firstName,
+            lastName: student.lastName,
+            image: student.image,
+            batch: batch
+        }).save();
+        return entity;
     }
 };
 __decorate([
@@ -58,19 +50,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "allStudents", null);
 __decorate([
-    routing_controllers_1.Put('/students/:id'),
+    routing_controllers_1.Post('/batches/:id/students'),
+    routing_controllers_1.HttpCode(201),
     __param(0, routing_controllers_1.Param('id')),
     __param(1, routing_controllers_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], StudentController.prototype, "updateStudent", null);
-__decorate([
-    routing_controllers_1.Post('/students'),
-    routing_controllers_1.HttpCode(201),
-    __param(0, routing_controllers_1.Body()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [entity_1.default]),
+    __metadata("design:paramtypes", [Number, entity_1.default]),
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "createStudent", null);
 StudentController = __decorate([

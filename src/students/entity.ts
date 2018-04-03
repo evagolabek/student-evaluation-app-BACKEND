@@ -1,10 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
-import { IsString, IsInt } from 'class-validator'
+import { IsString } from 'class-validator'
 import Evaluation from '../evaluations/entity'
 import Batch from '../batches/entity'
-// import { Exclude } from 'class-transformer'
-// import * as bcrypt from 'bcrypt'
 
 @Entity()
 export default class Student extends BaseEntity {
@@ -22,7 +20,7 @@ export default class Student extends BaseEntity {
 
   @IsString()
   @Column('text')
-  image: String
+  image?: String
 
   @OneToMany(_=> Evaluation, evaluation => evaluation.student)
   evaluations: Evaluation[]

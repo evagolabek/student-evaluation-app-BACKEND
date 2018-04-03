@@ -16,16 +16,16 @@ export default class UserController {
     return { users }
   }
 
-  @Put('/users/:id')
-  async updateUser(
-    @Param('id') id: number,
-    @Body() update: Partial<User>
-  ) {
-    const user = await User.findOneById(id)
-    if (!user) throw new NotFoundError('Cannot find user')
-
-    return User.merge(user, update).save()
-  }
+  // @Put('/users/:id')
+  // async updateUser(
+  //   @Param('id') id: number,
+  //   @Body() update: Partial<User>
+  // ) {
+  //   const user = await User.findOneById(id)
+  //   if (!user) throw new NotFoundError('Cannot find user')
+  //
+  //   return User.merge(user, update).save()
+  // }
 
   @Post('/users')
   @HttpCode(201)
@@ -37,5 +37,5 @@ export default class UserController {
     await entity.setPassword(password)
     return entity.save()
   }
-  
+
 }

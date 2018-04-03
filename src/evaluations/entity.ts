@@ -1,10 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
-import { IsString, IsInt, IsDate } from 'class-validator'
+import { IsString } from 'class-validator'
 import User from '../users/entity'
 import Student from '../students/entity'
-// import { Exclude } from 'class-transformer'
-// import * as bcrypt from 'bcrypt'
 
 @Entity()
 export default class Evaluation extends BaseEntity {
@@ -12,8 +10,8 @@ export default class Evaluation extends BaseEntity {
   @PrimaryGeneratedColumn()
   id?: number
 
-  @IsDate()
-  @Column()
+  @IsString()
+  @Column('text')
   date: Date
 
   @IsString()

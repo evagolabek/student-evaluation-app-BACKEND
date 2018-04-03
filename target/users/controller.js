@@ -31,12 +31,6 @@ let UserController = class UserController {
         const users = await entity_1.default.find();
         return { users };
     }
-    async updateUser(id, update) {
-        const user = await entity_1.default.findOneById(id);
-        if (!user)
-            throw new routing_controllers_1.NotFoundError('Cannot find user');
-        return entity_1.default.merge(user, update).save();
-    }
     async createUser(user) {
         const { password } = user, rest = __rest(user, ["password"]);
         const entity = entity_1.default.create(rest);
@@ -57,14 +51,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "allUsers", null);
-__decorate([
-    routing_controllers_1.Put('/users/:id'),
-    __param(0, routing_controllers_1.Param('id')),
-    __param(1, routing_controllers_1.Body()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "updateUser", null);
 __decorate([
     routing_controllers_1.Post('/users'),
     routing_controllers_1.HttpCode(201),

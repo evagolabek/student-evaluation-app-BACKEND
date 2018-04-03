@@ -20,18 +20,18 @@ __decorate([
     __metadata("design:type", Number)
 ], Batch.prototype, "id", void 0);
 __decorate([
-    class_validator_1.IsInt(),
-    typeorm_1.Column('int'),
+    class_validator_1.IsString(),
+    typeorm_1.Column('text'),
     __metadata("design:type", Number)
 ], Batch.prototype, "number", void 0);
 __decorate([
-    class_validator_1.IsDate(),
-    typeorm_1.Column(),
+    class_validator_1.IsString(),
+    typeorm_1.Column('text'),
     __metadata("design:type", Date)
 ], Batch.prototype, "startDate", void 0);
 __decorate([
-    class_validator_1.IsDate(),
-    typeorm_1.Column(),
+    class_validator_1.IsString(),
+    typeorm_1.Column('text'),
     __metadata("design:type", Date)
 ], Batch.prototype, "endDate", void 0);
 __decorate([

@@ -1,4 +1,4 @@
-import { JsonController, Get, Put, Post, Param, Body, NotFoundError, HttpCode } from 'routing-controllers'
+import { JsonController, Get, Post, Param, Body, HttpCode } from 'routing-controllers'
 import Batch from './entity'
 
 
@@ -19,12 +19,9 @@ export default class BatchController {
 
   @Post('/batches')
   @HttpCode(201)
-  async createBatch(
+  createBatch(
     @Body() batch: Batch
   ) {
-    const {password, ...rest} = user
-    const entity = Batch.create(rest)
-    await entity.setPassword(password)
-    return entity.save()
+    return batch.save()
   }
 }

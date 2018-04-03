@@ -1,5 +1,6 @@
-import { JsonController, Get, Put, Post, Param, Body, NotFoundError, HttpCode } from 'routing-controllers'
+import { JsonController, Get, Post, Param, Body, BadRequestError, HttpCode } from 'routing-controllers'
 import Student from './entity'
+import Batch from '../batches/entity'
 
 
 @JsonController()
@@ -17,26 +18,35 @@ export default class StudentController {
     return { students }
   }
 
-  @Put('/students/:id')
-  async updateStudent(
-    @Param('id') id: number,
-    @Body() update: Partial<Student>
-  ) {
-    const student = await Student.findOneById(id)
-    if (!student) throw new NotFoundError('Cannot find student')
+  // @Put('/students/:id')
+  // async updateStudent(
+  //   @Param('id') id: number,
+  //   @Body() update: Partial<Student>
+  // ) {
+  //   const student = await Student.findOneById(id)
+  //   if (!student) throw new NotFoundError('Cannot find student')
+  //
+  //   return Student.merge(student, update).save()
+  // }
 
-    return Student.merge(student, update).save()
-  }
-
-  @Post('/students')
+  @Post('/batches/:id/students')
   @HttpCode(201)
   async createStudent(
+    @Param('id') batchId: number,
     @Body() student: Student
   ) {
-    const {password, ...rest} = user
-    const entity = Student.create(rest)
-    await entity.setPassword(password)
-    return entity.save()
+    const batch = await Batch.findOneById(batchId)
+    if (!batch) throw new BadRequestError(`Batch does not exist`)
+
+    const entity = await Student.create({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      image: student.image,
+      batch: batch
+    }).save()
+
+    return entity
+
   }
-  
+
 }

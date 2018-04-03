@@ -21,8 +21,8 @@ __decorate([
     __metadata("design:type", Number)
 ], Evaluation.prototype, "id", void 0);
 __decorate([
-    class_validator_1.IsDate(),
-    typeorm_1.Column(),
+    class_validator_1.IsString(),
+    typeorm_1.Column('text'),
     __metadata("design:type", Date)
 ], Evaluation.prototype, "date", void 0);
 __decorate([
