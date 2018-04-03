@@ -1,0 +1,63 @@
+import { JsonController, Get, Put, Post, Param, Body, BadRequestError, HttpCode } from 'routing-controllers'
+import Evaluation from './entity'
+import Student from '../students/entity'
+import User from '../users/entity'
+
+
+@JsonController()
+export default class EvaluationController {
+
+  @Get('/evaluations/:id')
+  getEvaluation(
+    @Param('id') id: number
+  ) {
+    return Evaluation.findOneById(id)
+    }
+
+  @Get('/evaluations')
+  async allEvaluations() {
+    const evaluations = await Evaluation.find()
+    return { evaluations }
+  }
+
+  @Post('/students/:id1/users/:id2/evaluations')
+  @HttpCode(201)
+  async createEvaluation(
+    @Param('id1') studentId: number,
+    @Param('id2') userId: number,
+    @Body() evaluation: Evaluation
+  ) {
+    const student = await Student.findOneById(studentId)
+    if (!student) throw new BadRequestError(`Student does not exist`)
+
+    const user = await User.findOneById(userId)
+    if (!user) throw new BadRequestError(`User does not exist`)
+
+    if (evaluation.colour !== 'red'
+    && evaluation.colour !== 'yellow'
+    && evaluation.colour !== 'green')
+    throw new BadRequestError('Colour must be either red, yellow or green')
+
+    const entity = await Evaluation.create({
+      date: evaluation.date,
+      colour: evaluation.colour,
+      remarks: evaluation.remarks,
+      student: student,
+      user: user
+    }).save()
+
+    return entity
+  }
+
+  // @Put('/evaluations/:id')
+  // async updateEvaluation(
+  //   @Param('id') id: number,
+  //   @Body() update: Partial<Evaluation>
+  // ) {
+  //   const evaluation = await Evaluation.findOneById(id)
+  //   if (!evaluation) throw new NotFoundError('Cannot find evaluation')
+  //
+  //   return Evaluation.merge(evaluation, update).save()
+  // }
+
+}
