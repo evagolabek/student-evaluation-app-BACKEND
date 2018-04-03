@@ -23,6 +23,12 @@ let StudentController = class StudentController {
         const students = await entity_1.default.find();
         return { students };
     }
+    async updateStudent(id, update) {
+        const student = await entity_1.default.findOneById(id);
+        if (!student)
+            throw new routing_controllers_1.NotFoundError('Cannot find student');
+        return entity_1.default.merge(student, update).save();
+    }
     async createStudent(batchId, student) {
         const batch = await entity_2.default.findOneById(batchId);
         if (!batch)
@@ -34,6 +40,13 @@ let StudentController = class StudentController {
             batch: batch
         }).save();
         return entity;
+    }
+    async deleteStudent(id) {
+        const student = await entity_1.default.findOneById(id);
+        if (!student)
+            throw new routing_controllers_1.NotFoundError('Cannot find student');
+        await student.remove();
+        return 'Student succesfully deleted';
     }
 };
 __decorate([
@@ -50,6 +63,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "allStudents", null);
 __decorate([
+    routing_controllers_1.Put('/students/:id'),
+    __param(0, routing_controllers_1.Param('id')),
+    __param(1, routing_controllers_1.Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "updateStudent", null);
+__decorate([
     routing_controllers_1.Post('/batches/:id/students'),
     routing_controllers_1.HttpCode(201),
     __param(0, routing_controllers_1.Param('id')),
@@ -58,6 +79,14 @@ __decorate([
     __metadata("design:paramtypes", [Number, entity_1.default]),
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "createStudent", null);
+__decorate([
+    routing_controllers_1.Delete('/students/:id'),
+    routing_controllers_1.HttpCode(200),
+    __param(0, routing_controllers_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "deleteStudent", null);
 StudentController = __decorate([
     routing_controllers_1.JsonController()
 ], StudentController);
