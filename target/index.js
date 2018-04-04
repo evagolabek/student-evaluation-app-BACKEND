@@ -10,6 +10,7 @@ const controller_5 = require("./students/controller");
 const db_1 = require("./db");
 const port = process.env.PORT || 4000;
 const app = routing_controllers_1.createKoaServer({
+    cors: true,
     controllers: [
         controller_1.default,
         controller_2.default,
