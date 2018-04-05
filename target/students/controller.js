@@ -16,8 +16,11 @@ const routing_controllers_1 = require("routing-controllers");
 const entity_1 = require("./entity");
 const entity_2 = require("../batches/entity");
 let StudentController = class StudentController {
-    getStudent(id) {
-        return entity_1.default.findOneById(id);
+    async getStudent(id) {
+        const student = await entity_1.default.findOneById(id);
+        if (!student)
+            throw new routing_controllers_1.NotFoundError('Cannot find student');
+        return student;
     }
     async allStudents() {
         const students = await entity_1.default.find();
@@ -54,7 +57,7 @@ __decorate([
     __param(0, routing_controllers_1.Param('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], StudentController.prototype, "getStudent", null);
 __decorate([
     routing_controllers_1.Get('/students'),

@@ -5,11 +5,15 @@ import Batch from '../batches/entity'
 
 @JsonController()
 export default class StudentController {
+
   @Get('/students/:id')
-  getStudent(
+  async getStudent(
     @Param('id') id: number
   ) {
-    return Student.findOneById(id)
+    const student = await Student.findOneById(id)
+    if (!student) throw new NotFoundError('Cannot find student')
+
+    return student
     }
 
   @Get('/students')

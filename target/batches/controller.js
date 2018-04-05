@@ -13,6 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const routing_controllers_1 = require("routing-controllers");
+const typeorm_1 = require("typeorm");
 const entity_1 = require("./entity");
 let BatchController = class BatchController {
     getBatch(id) {
@@ -24,6 +25,16 @@ let BatchController = class BatchController {
     }
     createBatch(batch) {
         return batch.save();
+    }
+    async getBatchStudents(batchId) {
+        const batchStudents = await typeorm_1.getConnection()
+            .createQueryBuilder()
+            .select()
+            .from(entity_1.default, "batch")
+            .leftJoinAndSelect("batch.students", "student")
+            .where("batch.id = :id", { id: batchId })
+            .getOne();
+        return { batchStudents };
     }
 };
 __decorate([
@@ -47,6 +58,13 @@ __decorate([
     __metadata("design:paramtypes", [entity_1.default]),
     __metadata("design:returntype", void 0)
 ], BatchController.prototype, "createBatch", null);
+__decorate([
+    routing_controllers_1.Get('/batches/:id/students'),
+    __param(0, routing_controllers_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], BatchController.prototype, "getBatchStudents", null);
 BatchController = __decorate([
     routing_controllers_1.JsonController()
 ], BatchController);
