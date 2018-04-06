@@ -1,14 +1,15 @@
-import { JsonController, Get, Put, Post, Param, Body, BadRequestError, HttpCode } from 'routing-controllers'
+import { JsonController, Get, Post, Param, Body, HttpCode, NotFoundError, BadRequestError } from 'routing-controllers'
 import Evaluation from './entity'
 import Student from '../students/entity'
 import User from '../users/entity'
+import { getConnection } from "typeorm"
 
 
 @JsonController()
 export default class EvaluationController {
 
   @Get('/evaluations/:id')
-  getEvaluation(
+  getBatch(
     @Param('id') id: number
   ) {
     return Evaluation.findOneById(id)
@@ -28,15 +29,14 @@ export default class EvaluationController {
     @Body() evaluation: Evaluation
   ) {
     const student = await Student.findOneById(studentId)
-    if (!student) throw new BadRequestError(`Student does not exist`)
+    if (!student) throw new NotFoundError('Cannot find student')
 
     const user = await User.findOneById(userId)
-    if (!user) throw new BadRequestError(`User does not exist`)
+    if (!user) throw new NotFoundError('Cannot find user')
 
-    if (evaluation.colour !== 'red'
-    && evaluation.colour !== 'yellow'
-    && evaluation.colour !== 'green')
-    throw new BadRequestError('Colour must be either red, yellow or green')
+    if (evaluation.colour !== 'red' && evaluation.colour !== 'yellow'
+    && evaluation.colour !== 'green') throw new BadRequestError
+    ('Colour must be either red, green or yelllow')
 
     const entity = await Evaluation.create({
       date: evaluation.date,
@@ -49,15 +49,21 @@ export default class EvaluationController {
     return entity
   }
 
-  // @Put('/evaluations/:id')
-  // async updateEvaluation(
-  //   @Param('id') id: number,
-  //   @Body() update: Partial<Evaluation>
-  // ) {
-  //   const evaluation = await Evaluation.findOneById(id)
-  //   if (!evaluation) throw new NotFoundError('Cannot find evaluation')
-  //
-  //   return Evaluation.merge(evaluation, update).save()
-  // }
 
+  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
+  // see Joining relations
+  @Get('/students/:id/evaluations')
+  async getStudentEvaluations(
+    @Param('id') studentId: number
+  ) {
+    const studentEvaluations = await getConnection()
+      .createQueryBuilder()
+      .select()
+      .from(Student, "student")
+      .leftJoinAndSelect("student.evaluations", "evaluation")
+      .where("student.id = :id", { id: studentId})
+      .getOne()
+
+    return {studentEvaluations}
+  }
 }

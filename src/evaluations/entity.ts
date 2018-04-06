@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
 import { BaseEntity } from 'typeorm/repository/BaseEntity'
 import { IsString } from 'class-validator'
-import User from '../users/entity'
 import Student from '../students/entity'
+import User from '../users/entity'
 
 @Entity()
 export default class Evaluation extends BaseEntity {
@@ -16,16 +16,16 @@ export default class Evaluation extends BaseEntity {
 
   @IsString()
   @Column('text')
-  colour: 'green' | 'yellow' | 'red'
+  colour: string
 
   @IsString()
   @Column('text')
   remarks: string
 
-  @ManyToOne(_=> User, user => user.evaluations)
-  user: User;
-
   @ManyToOne(_=> Student, student => student.evaluations)
-  student: Student;
+  student: Student
+
+  @ManyToOne(_=> User, user => user.evaluations)
+  user: User
 
 }
