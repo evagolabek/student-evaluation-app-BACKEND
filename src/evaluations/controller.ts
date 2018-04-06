@@ -2,6 +2,7 @@ import { JsonController, Get, Post, Param, Body, HttpCode, NotFoundError, BadReq
 import Evaluation from './entity'
 import Student from '../students/entity'
 import User from '../users/entity'
+import { getConnection } from "typeorm"
 
 
 @JsonController()
@@ -46,5 +47,23 @@ export default class EvaluationController {
     }).save()
 
     return entity
+  }
+
+
+  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
+  // see Joining relations
+  @Get('/students/:id/evaluations')
+  async getStudentEvaluations(
+    @Param('id') studentId: number
+  ) {
+    const studentEvaluations = await getConnection()
+      .createQueryBuilder()
+      .select()
+      .from(Student, "student")
+      .leftJoinAndSelect("student.evaluations", "evaluation")
+      .where("student.id = :id", { id: studentId})
+      .getOne()
+
+    return {studentEvaluations}
   }
 }

@@ -16,6 +16,7 @@ const routing_controllers_1 = require("routing-controllers");
 const entity_1 = require("./entity");
 const entity_2 = require("../students/entity");
 const entity_3 = require("../users/entity");
+const typeorm_1 = require("typeorm");
 let EvaluationController = class EvaluationController {
     getBatch(id) {
         return entity_1.default.findOneById(id);
@@ -43,6 +44,16 @@ let EvaluationController = class EvaluationController {
         }).save();
         return entity;
     }
+    async getStudentEvaluations(studentId) {
+        const studentEvaluations = await typeorm_1.getConnection()
+            .createQueryBuilder()
+            .select()
+            .from(entity_2.default, "student")
+            .leftJoinAndSelect("student.evaluations", "evaluation")
+            .where("student.id = :id", { id: studentId })
+            .getOne();
+        return { studentEvaluations };
+    }
 };
 __decorate([
     routing_controllers_1.Get('/evaluations/:id'),
@@ -67,6 +78,13 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number, entity_1.default]),
     __metadata("design:returntype", Promise)
 ], EvaluationController.prototype, "createEvaluation", null);
+__decorate([
+    routing_controllers_1.Get('/students/:id/evaluations'),
+    __param(0, routing_controllers_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], EvaluationController.prototype, "getStudentEvaluations", null);
 EvaluationController = __decorate([
     routing_controllers_1.JsonController()
 ], EvaluationController);
