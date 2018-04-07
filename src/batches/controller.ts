@@ -28,7 +28,7 @@ export default class BatchController {
 
   // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
   // see Joining relations
-    @Get('/batches/:id/students')
+  @Get('/batches/:id/students')
     async getBatchStudents(
       @Param('id') batchId: number
     ) {
