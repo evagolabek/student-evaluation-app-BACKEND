@@ -1,6 +1,6 @@
 import { JsonController, Get, Post, Param, Body, HttpCode } from 'routing-controllers'
-import { getConnection } from "typeorm"
 import Batch from './entity'
+import { getConnection } from "typeorm"
 
 
 @JsonController()
@@ -26,8 +26,8 @@ export default class BatchController {
     return batch.save()
   }
 
-  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
-  // see Joining relations
+  //to get students for batch
+  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md // see Joining relations
   @Get('/batches/:id/students')
     async getBatchStudents(
       @Param('id') batchId: number

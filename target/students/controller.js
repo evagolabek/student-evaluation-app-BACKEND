@@ -40,6 +40,7 @@ let StudentController = class StudentController {
             firstName: student.firstName,
             lastName: student.lastName,
             image: student.image,
+            lastColour: student.lastColour,
             batch: batch
         }).save();
         return entity;
@@ -50,6 +51,27 @@ let StudentController = class StudentController {
             throw new routing_controllers_1.NotFoundError('Cannot find student');
         await student.remove();
         return 'Student succesfully deleted';
+    }
+    async getRandomStudent(batchId) {
+        const allStudents = await entity_1.default.find();
+        const students = allStudents.filter(student => student.batchId === batchId);
+        const randomNumber = Math.random();
+        console.log(randomNumber);
+        if (randomNumber < 0.53) {
+            const redStudents = students.filter(student => (student.lastColour !== 'yellow' && student.lastColour !== 'green'));
+            const randomStudent = redStudents[Math.floor(Math.random() * redStudents.length)];
+            return randomStudent;
+        }
+        else if (randomNumber >= 0.53 && randomNumber < 0.81) {
+            const yellowStudents = students.filter(student => student.lastColour === 'yellow');
+            const randomStudent = yellowStudents[Math.floor(Math.random() * yellowStudents.length)];
+            return randomStudent;
+        }
+        else {
+            const greenStudents = students.filter(student => student.lastColour === 'green');
+            const randomStudent = greenStudents[Math.floor(Math.random() * greenStudents.length)];
+            return randomStudent;
+        }
     }
 };
 __decorate([
@@ -90,6 +112,13 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], StudentController.prototype, "deleteStudent", null);
+__decorate([
+    routing_controllers_1.Get('/batches/:id/randomStudent'),
+    __param(0, routing_controllers_1.Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], StudentController.prototype, "getRandomStudent", null);
 StudentController = __decorate([
     routing_controllers_1.JsonController()
 ], StudentController);

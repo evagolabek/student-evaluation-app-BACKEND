@@ -36,6 +36,11 @@ __decorate([
     __metadata("design:type", String)
 ], Student.prototype, "image", void 0);
 __decorate([
+    class_validator_1.IsString(),
+    typeorm_1.Column('text', { nullable: true }),
+    __metadata("design:type", String)
+], Student.prototype, "lastColour", void 0);
+__decorate([
     typeorm_1.OneToMany(_ => entity_1.default, evaluation => evaluation.student),
     __metadata("design:type", Array)
 ], Student.prototype, "evaluations", void 0);
@@ -43,6 +48,10 @@ __decorate([
     typeorm_1.ManyToOne(_ => entity_2.default, batch => batch.students),
     __metadata("design:type", entity_2.default)
 ], Student.prototype, "batch", void 0);
+__decorate([
+    typeorm_1.RelationId((student) => student.batch),
+    __metadata("design:type", Number)
+], Student.prototype, "batchId", void 0);
 Student = __decorate([
     typeorm_1.Entity()
 ], Student);

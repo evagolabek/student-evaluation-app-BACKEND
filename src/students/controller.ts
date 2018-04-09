@@ -1,6 +1,7 @@
 import { JsonController, Get, Post, Put, Delete, Param, Body, NotFoundError, BadRequestError, HttpCode } from 'routing-controllers'
 import Student from './entity'
 import Batch from '../batches/entity'
+import { getConnection } from "typeorm"
 
 
 @JsonController()
@@ -46,6 +47,7 @@ export default class StudentController {
       firstName: student.firstName,
       lastName: student.lastName,
       image: student.image,
+      lastColour: student.lastColour,
       batch: batch
     }).save()
 
@@ -65,4 +67,33 @@ export default class StudentController {
     return 'Student succesfully deleted'
     }
 
+
+    @Get('/batches/:id/randomStudent')
+    async getRandomStudent(
+      @Param('id') batchId: number
+    ) {
+      const allStudents = await Student.find()
+      const students = allStudents.filter(student => student.batchId === batchId)
+
+      const randomNumber = Math.random()
+      console.log(randomNumber)
+      if (randomNumber < 0.53) {
+        //red or no evaluation ( = not yellow and not green)
+        const redStudents = students.filter(student => (student.lastColour !== 'yellow' && student.lastColour !== 'green'))
+        const randomStudent = redStudents[Math.floor( Math.random()*redStudents.length )] //  to find the student index
+        return randomStudent
+      }
+      else if (randomNumber >= 0.53 && randomNumber < 0.81) {
+        //yellow
+        const yellowStudents = students.filter(student => student.lastColour === 'yellow')
+        const randomStudent = yellowStudents[Math.floor( Math.random()*yellowStudents.length )]
+        return randomStudent
+      }
+      else {
+        //green
+        const greenStudents = students.filter(student => student.lastColour === 'green')
+        const randomStudent = greenStudents[Math.floor( Math.random()*greenStudents.length )]
+        return randomStudent
+      }
+    }
 }

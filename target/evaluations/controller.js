@@ -42,6 +42,7 @@ let EvaluationController = class EvaluationController {
             student: student,
             user: user
         }).save();
+        await entity_2.default.merge(student, { lastColour: evaluation.colour }).save();
         return entity;
     }
     async getStudentEvaluations(studentId) {

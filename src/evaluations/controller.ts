@@ -46,12 +46,13 @@ export default class EvaluationController {
       user: user
     }).save()
 
+    await Student.merge(student,{lastColour: evaluation.colour}).save()
+
     return entity
   }
 
-
-  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md
-  // see Joining relations
+  //to get evaluations for student
+  // https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md // see Joining relations
   @Get('/students/:id/evaluations')
   async getStudentEvaluations(
     @Param('id') studentId: number

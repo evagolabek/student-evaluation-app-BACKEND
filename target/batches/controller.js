@@ -13,8 +13,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const routing_controllers_1 = require("routing-controllers");
-const typeorm_1 = require("typeorm");
 const entity_1 = require("./entity");
+const typeorm_1 = require("typeorm");
 let BatchController = class BatchController {
     getBatch(id) {
         return entity_1.default.findOneById(id);
